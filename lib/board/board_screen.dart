@@ -96,9 +96,10 @@ class _BoardScreenState extends State<BoardScreen> {
       headerBuilder: (context, columnData) {
         return KanbanGroupHeader(
           icon: const Icon(Icons.lightbulb_circle),
-          title: SizedBox(
-            width: 60,
+          title: Expanded(
             child: TextField(
+              onTapOutside: (_) =>
+                  FocusManager.instance.primaryFocus?.unfocus(),
               controller: TextEditingController()
                 ..text = columnData.headerData.groupName,
               onSubmitted: (val) {
@@ -108,8 +109,6 @@ class _BoardScreenState extends State<BoardScreen> {
               },
             ),
           ),
-          addIcon: const Icon(Icons.add, size: 20),
-          moreIcon: const Icon(Icons.more_horiz, size: 20),
           height: 50,
           margin: config.groupBodyPadding,
         );
@@ -120,19 +119,7 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget _buildCard(KanbanGroupItem item) {
-    // if (item is TextItem) {
-    //   return Align(
-    //     alignment: Alignment.centerLeft,
-    //     child: Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-    //       child: Text(item.s),
-    //     ),
-    //   );
-    // }
-
-    if (item is Task) {
-      return TaskCard(task: item);
-    }
+    if (item is Task) return TaskCard(task: item);
 
     throw UnimplementedError();
   }
