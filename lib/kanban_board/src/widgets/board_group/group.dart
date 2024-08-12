@@ -36,7 +36,7 @@ typedef KanbanBoardFooterBuilder = Widget Function(
   KanbanGroupData groupData,
 );
 
-abstract class KanbanGroupDataDataSource implements ReoderFlexDataSource {
+abstract class KanbanGroupDataDataSource implements ReorderFlexDataSource {
   KanbanGroupData get groupData;
 
   List<String> get acceptedGroupIds;
