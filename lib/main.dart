@@ -90,48 +90,49 @@ class _MultiBoardListExampleState extends State<MultiBoardListExample> {
       stretchGroupHeight: false,
     );
     return KanbanBoard(
-        controller: controller,
-        cardBuilder: (context, group, groupItem) {
-          return KanbanGroupCard(
-            key: ValueKey(groupItem.id),
-            child: _buildCard(groupItem),
-          );
-        },
-        boardScrollController: boardController,
-        footerBuilder: (context, columnData) {
-          return KanbanGroupFooter(
-            icon: const Icon(Icons.add, size: 20),
-            title: const Text('New'),
-            height: 50,
-            margin: config.groupBodyPadding,
-            onAddButtonClick: () {
-              boardController.scrollToBottom(columnData.id);
-            },
-          );
-        },
-        headerBuilder: (context, columnData) {
-          return KanbanGroupHeader(
-            icon: const Icon(Icons.lightbulb_circle),
-            title: SizedBox(
-              width: 60,
-              child: TextField(
-                controller: TextEditingController()
-                  ..text = columnData.headerData.groupName,
-                onSubmitted: (val) {
-                  controller
-                      .getGroupController(columnData.headerData.groupId)!
-                      .updateGroupName(val);
-                },
-              ),
+      controller: controller,
+      cardBuilder: (context, group, groupItem) {
+        return KanbanGroupCard(
+          key: ValueKey(groupItem.id),
+          child: _buildCard(groupItem),
+        );
+      },
+      boardScrollController: boardController,
+      footerBuilder: (context, columnData) {
+        return KanbanGroupFooter(
+          icon: const Icon(Icons.add, size: 20),
+          title: const Text('New'),
+          height: 50,
+          margin: config.groupBodyPadding,
+          onAddButtonClick: () {
+            boardController.scrollToBottom(columnData.id);
+          },
+        );
+      },
+      headerBuilder: (context, columnData) {
+        return KanbanGroupHeader(
+          icon: const Icon(Icons.lightbulb_circle),
+          title: SizedBox(
+            width: 60,
+            child: TextField(
+              controller: TextEditingController()
+                ..text = columnData.headerData.groupName,
+              onSubmitted: (val) {
+                controller
+                    .getGroupController(columnData.headerData.groupId)!
+                    .updateGroupName(val);
+              },
             ),
-            addIcon: const Icon(Icons.add, size: 20),
-            moreIcon: const Icon(Icons.more_horiz, size: 20),
-            height: 50,
-            margin: config.groupBodyPadding,
-          );
-        },
-        groupConstraints: const BoxConstraints.tightFor(width: 240),
-        config: config);
+          ),
+          addIcon: const Icon(Icons.add, size: 20),
+          moreIcon: const Icon(Icons.more_horiz, size: 20),
+          height: 50,
+          margin: config.groupBodyPadding,
+        );
+      },
+      groupConstraints: const BoxConstraints.tightFor(width: 240),
+      config: config,
+    );
   }
 
   Widget _buildCard(KanbanGroupItem item) {
