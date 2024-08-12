@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/log.dart';
-
 import 'drag_target.dart';
 import 'reorder_flex.dart';
 
@@ -29,7 +28,7 @@ class FlexDragTargetData extends DragTargetData {
   final int draggingIndex;
 
   final String reorderFlexId;
-  final ReoderFlexItem reorderFlexItem;
+  final ReorderFlexItem reorderFlexItem;
   final GlobalObjectKey dragTargetIndexKey;
   final DraggingState _draggingState;
 

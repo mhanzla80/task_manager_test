@@ -4,32 +4,46 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import '../../utils/log.dart';
-
 import 'drag_state.dart';
 import 'drag_target.dart';
 import 'drag_target_interceptor.dart';
 import 'reorder_mixin.dart';
 
+// part 'reorder_flex.g.dart';
+
 typedef OnDragStarted = void Function(int index);
 typedef OnDragEnded = void Function();
 typedef OnReorder = void Function(int fromIndex, int toIndex);
 
-abstract class ReoderFlexDataSource {
+abstract class ReorderFlexDataSource {
   /// [identifier] represents the id the [ReorderFlex]. It must be unique.
   String get identifier;
 
-  /// The number of [ReoderFlexItem]s will be displayed in the [ReorderFlex].
-  UnmodifiableListView<ReoderFlexItem> get items;
+  /// The number of [ReorderFlexItem]s will be displayed in the [ReorderFlex].
+  UnmodifiableListView<ReorderFlexItem> get items;
 }
 
-/// Each item displayed in the [ReorderFlex] required to implement the [ReoderFlexItem].
-abstract class ReoderFlexItem {
+/// Each item displayed in the [ReorderFlex] required to implement the [ReorderFlexItem].
+
+@JsonSerializable()
+abstract class ReorderFlexItem {
   /// [id] is used to identify the item. It must be unique.
   String get id;
-
+  @JsonKey(
+    fromJson: draggableFromJson,
+    toJson: draggableToJson,
+  )
   ValueNotifier<bool> draggable = ValueNotifier(true);
+
+  // Custom `fromJson` method for `ValueNotifier<bool>`
+  static ValueNotifier<bool> draggableFromJson(bool json) =>
+      ValueNotifier<bool>(json);
+
+  // Custom `toJson` method for `ValueNotifier<bool>`
+  static bool draggableToJson(ValueNotifier<bool> instance) => instance.value;
 }
 
 /// Cache each dragTarget's key.
@@ -110,7 +124,7 @@ class ReorderFlex extends StatefulWidget {
           'All child must have a key.',
         );
 
-  final ReoderFlexDataSource dataSource;
+  final ReorderFlexDataSource dataSource;
   final List<Widget> children;
   final ReorderFlexConfig config;
 
@@ -228,7 +242,7 @@ class ReorderFlexState extends State<ReorderFlex>
 
     for (int i = 0; i < widget.children.length; i++) {
       final Widget child = widget.children[i];
-      final ReoderFlexItem item = widget.dataSource.items[i];
+      final ReorderFlexItem item = widget.dataSource.items[i];
 
       final indexKey = GlobalObjectKey(child.key!);
       // Save the index key for quick access

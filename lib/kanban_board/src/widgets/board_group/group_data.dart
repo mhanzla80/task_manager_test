@@ -10,7 +10,7 @@ typedef IsDraggable = bool;
 /// A item represents the generic data model of each group card.
 ///
 /// Each item displayed in the group required to implement this class.
-abstract class KanbanGroupItem extends ReoderFlexItem {
+abstract class KanbanGroupItem extends ReorderFlexItem {
   bool get isPhantom => false;
 
   @override
@@ -188,7 +188,7 @@ class KanbanGroupController extends ChangeNotifier with EquatableMixin {
 }
 
 /// [KanbanGroupData] represents the data of each group of the Board.
-class KanbanGroupData<CustomData> extends ReoderFlexItem with EquatableMixin {
+class KanbanGroupData<CustomData> extends ReorderFlexItem with EquatableMixin {
   KanbanGroupData({
     required this.id,
     required String name,

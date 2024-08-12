@@ -51,7 +51,7 @@ typedef OnStartDraggingCard = void Function(
 /// one group to another group.
 class KanbanBoardController extends ChangeNotifier
     with EquatableMixin
-    implements BoardPhantomControllerDelegate, ReoderFlexDataSource {
+    implements BoardPhantomControllerDelegate, ReorderFlexDataSource {
   KanbanBoardController({
     this.onMoveGroup,
     this.onMoveGroupItem,
@@ -278,7 +278,7 @@ class KanbanBoardController extends ChangeNotifier
   String get identifier => '$KanbanBoardController';
 
   @override
-  UnmodifiableListView<ReoderFlexItem> get items =>
+  UnmodifiableListView<ReorderFlexItem> get items =>
       UnmodifiableListView(_groupDatas);
 
   @override
