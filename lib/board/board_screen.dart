@@ -2,69 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:task_manager_test/board/widgets/task_card.dart';
 import 'package:task_manager_test/kanban_board/kanban_board.dart';
 import 'package:task_manager_test/models/task_group.dart';
+import 'package:task_manager_test/providers/board_provider.dart';
 
 class BoardScreen extends StatefulWidget {
-  const BoardScreen({super.key});
+  final BoardProvider provider;
+  const BoardScreen({super.key, required this.provider});
 
   @override
   State<BoardScreen> createState() => _BoardScreenState();
 }
 
 class _BoardScreenState extends State<BoardScreen> {
-  final KanbanBoardController controller = KanbanBoardController(
-    onMoveGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
-      debugPrint('Move item from $fromIndex to $toIndex');
-    },
-    onMoveGroupItem: (groupId, fromIndex, toIndex) {
-      debugPrint('Move $groupId:$fromIndex to $groupId:$toIndex');
-    },
-    onMoveGroupItemToGroup: (fromGroupId, fromIndex, toGroupId, toIndex) {
-      debugPrint('Move $fromGroupId:$fromIndex to $toGroupId:$toIndex');
-    },
-  );
-
-  late KanbanBoardScrollController boardController;
-
   @override
   void initState() {
     super.initState();
-    boardController = KanbanBoardScrollController();
-    final group1 = KanbanGroupData(
-      id: "To Do",
-      name: "To Do",
-      items: [
-        Task(title: "Card 1"),
-        Task(title: "Card 2"),
-        Task(title: "Card 3", subtitle: 'Aug 1, 2020 4:05 PM'),
-        Task(title: "Card 4"),
-        Task(title: "Card 5"),
-      ],
-    );
 
-    final group2 = KanbanGroupData(
-      id: "In Progress",
-      name: "In Progress",
-      items: [
-        Task(title: "Card 6"),
-        Task(title: "Card 7", subtitle: 'Aug 1, 2020 4:05 PM'),
-        Task(title: "Card 8", subtitle: 'Aug 1, 2020 4:05 PM'),
-      ],
-    );
-
-    final group3 = KanbanGroupData(
-      id: "Pending",
-      name: "Pending",
-      items: [
-        Task(title: "Card 9"),
-        Task(title: "Card 10", subtitle: 'Aug 1, 2020 4:05 PM'),
-        Task(title: "Card 11"),
-        Task(title: "Card 12"),
-      ],
-    );
-
-    controller.addGroup(group1);
-    controller.addGroup(group2);
-    controller.addGroup(group3);
+    for (final e in TaskGroup.tempTaskGroups) {
+      final group = KanbanGroupData(
+        id: e.id,
+        name: e.name,
+        items: e.taskItems,
+      );
+      widget.provider.controller.addGroup(group);
+    }
   }
 
   @override
@@ -74,14 +34,14 @@ class _BoardScreenState extends State<BoardScreen> {
       stretchGroupHeight: false,
     );
     return KanbanBoard(
-      controller: controller,
+      controller: widget.provider.controller,
       cardBuilder: (context, group, groupItem) {
         return KanbanGroupCard(
           key: ValueKey(groupItem.id),
           child: _buildCard(groupItem),
         );
       },
-      boardScrollController: boardController,
+      boardScrollController: widget.provider.boardController,
       footerBuilder: (context, columnData) {
         return KanbanGroupFooter(
           icon: const Icon(Icons.add, size: 20),
@@ -89,7 +49,7 @@ class _BoardScreenState extends State<BoardScreen> {
           height: 50,
           margin: config.groupBodyPadding,
           onAddButtonClick: () {
-            boardController.scrollToBottom(columnData.id);
+            widget.provider.boardController.scrollToBottom(columnData.id);
           },
         );
       },
@@ -103,7 +63,7 @@ class _BoardScreenState extends State<BoardScreen> {
               controller: TextEditingController()
                 ..text = columnData.headerData.groupName,
               onSubmitted: (val) {
-                controller
+                widget.provider.controller
                     .getGroupController(columnData.headerData.groupId)!
                     .updateGroupName(val);
               },
@@ -113,7 +73,7 @@ class _BoardScreenState extends State<BoardScreen> {
           margin: config.groupBodyPadding,
         );
       },
-      groupConstraints: const BoxConstraints.tightFor(width: 240),
+      groupConstraints: const BoxConstraints.tightFor(width: 300),
       config: config,
     );
   }

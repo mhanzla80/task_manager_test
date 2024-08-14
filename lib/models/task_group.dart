@@ -14,13 +14,46 @@ class TaskGroup {
   const TaskGroup({
     required this.id,
     required this.name,
-    required this.taskItems,
+    this.taskItems = const [],
   });
 
   factory TaskGroup.fromJson(Map<String, dynamic> json) =>
       _$TaskGroupFromJson(json);
 
   Map<String, dynamic> toJson() => _$TaskGroupToJson(this);
+
+  static final tempTaskGroups = [
+    TaskGroup(
+      id: 'To Do',
+      name: 'To Do',
+      taskItems: [
+        Task(title: "Card 1"),
+        Task(title: "Card 2"),
+        Task(title: "Card 3", subtitle: 'Aug 1, 2020 4:05 PM'),
+        Task(title: "Card 4"),
+        Task(title: "Card 5"),
+      ],
+    ),
+    TaskGroup(
+      id: 'In Progress',
+      name: 'In Progress',
+      taskItems: [
+        Task(title: "Card 6"),
+        Task(title: "Card 7", subtitle: 'Aug 1, 2020 4:05 PM'),
+        Task(title: "Card 8", subtitle: 'Aug 1, 2020 4:05 PM'),
+      ],
+    ),
+    TaskGroup(
+      id: 'Pending',
+      name: 'Pending',
+      taskItems: [
+        Task(title: "Card 9"),
+        Task(title: "Card 10", subtitle: 'Aug 1, 2020 4:05 PM'),
+        Task(title: "Card 11"),
+        Task(title: "Card 12"),
+      ],
+    ),
+  ];
 }
 
 @JsonSerializable()
