@@ -9,13 +9,17 @@ part 'task_group.g.dart';
 class TaskGroup {
   final String id;
   final String name;
-  final List<Task> taskItems;
+  final List<KanbanGroupItem> taskItems;
+  final KanbanGroupHeaderData headerData;
 
-  const TaskGroup({
+  TaskGroup({
     required this.id,
     required this.name,
     this.taskItems = const [],
-  });
+  }) : headerData = KanbanGroupHeaderData(
+          groupId: id,
+          groupName: name,
+        );
 
   factory TaskGroup.fromJson(Map<String, dynamic> json) =>
       _$TaskGroupFromJson(json);

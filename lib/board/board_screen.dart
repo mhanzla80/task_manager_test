@@ -28,6 +28,12 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   @override
+  void dispose() {
+    widget.provider.controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     const config = KanbanBoardConfig(
       groupBackgroundColor: Colors.white,

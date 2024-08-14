@@ -41,7 +41,9 @@ class TaskTimer {
 
   void resetTimer() {
     // _stopwatch.reset();
+    saveElapsedTime(id);
     _elapsedTime = 0;
+    _timer?.cancel();
     _isRunning = false;
   }
 
