@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_test/board/widgets/create_task_card_widget.dart';
 import 'package:task_manager_test/board/widgets/task_card.dart';
 import 'package:task_manager_test/helpers/prefs.dart';
 import 'package:task_manager_test/kanban_board/kanban_board.dart';
@@ -22,6 +23,14 @@ class _BoardScreenState extends State<BoardScreen> {
     for (final e in boardData) {
       widget.provider.controller.addGroup(e);
     }
+    // for (final e in TaskGroup.tempTaskGroups) {
+    //   final group = KanbanGroupData(
+    //     id: e.id,
+    //     name: e.name,
+    //     items: e.taskItems,
+    //   );
+    //   widget.provider.controller.addGroup(group);
+    // }
   }
 
   @override
@@ -43,8 +52,12 @@ class _BoardScreenState extends State<BoardScreen> {
       boardScrollController: widget.provider.boardController,
       footerBuilder: (context, columnData) {
         return KanbanGroupFooter(
-          icon: const Icon(Icons.add, size: 20),
-          title: const Text('New'),
+          title: TextButton.icon(
+            onPressed: () => createTaskInputBottomSheet(
+                context, widget.provider, columnData.id),
+            label: const Text('New'),
+            icon: const Icon(Icons.add, size: 20),
+          ),
           height: 50,
           margin: BoardProvider.config.groupBodyPadding,
           onAddButtonClick: () {
@@ -65,6 +78,8 @@ class _BoardScreenState extends State<BoardScreen> {
                 widget.provider.controller
                     .getGroupController(columnData.headerData.groupId)!
                     .updateGroupName(val);
+                Prefs.instance
+                    .saveBoardData(widget.provider.controller.groupDatas);
               },
             ),
           ),
@@ -81,5 +96,14 @@ class _BoardScreenState extends State<BoardScreen> {
     if (item is Task) return TaskCard(task: item);
 
     throw UnimplementedError();
+  }
+
+  void createTaskInputBottomSheet(
+      BuildContext context, BoardProvider provider, String id) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) =>
+          CreateTaskCardWidget(provider: provider, groupId: id),
+    );
   }
 }

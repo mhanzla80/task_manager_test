@@ -221,6 +221,7 @@ class KanbanBoardController extends ChangeNotifier
   /// If the group with id [groupId] is not exist, this method will do nothing.
   void addGroupItem(String groupId, KanbanGroupItem item) {
     getGroupController(groupId)?.add(item);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Inserts the [KanbanGroupItem] at [index] in the group
@@ -228,6 +229,7 @@ class KanbanBoardController extends ChangeNotifier
   /// It will do nothing if the group with id [groupId] is not exist
   void insertGroupItem(String groupId, int index, KanbanGroupItem item) {
     getGroupController(groupId)?.insert(index, item);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Removes the item with id [itemId] from the group
@@ -235,6 +237,7 @@ class KanbanBoardController extends ChangeNotifier
   /// It will do nothing if the group with id [groupId] is not exist
   void removeGroupItem(String groupId, String itemId) {
     getGroupController(groupId)?.removeWhere((item) => item.id == itemId);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Replaces or inserts the [KanbanGroupItem] to the end of the group.
@@ -242,6 +245,7 @@ class KanbanBoardController extends ChangeNotifier
   /// If the group with id [groupId] is not exist, this method will do nothing.
   void updateGroupItem(String groupId, KanbanGroupItem item) {
     getGroupController(groupId)?.replaceOrInsertItem(item);
+    onAnyChange?.call(_groupDatas);
   }
 
   void enableGroupDragging(bool isEnable) {

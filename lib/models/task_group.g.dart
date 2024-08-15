@@ -10,7 +10,8 @@ TaskGroup _$TaskGroupFromJson(Map<String, dynamic> json) => TaskGroup(
       id: json['id'] as String,
       name: json['name'] as String,
       taskItems: (json['taskItems'] as List<dynamic>?)
-              ?.map((e) => Task.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  Task.fromJson(e as Map<String, dynamic>) as KanbanGroupItem)
               .toList() ??
           const [],
     );

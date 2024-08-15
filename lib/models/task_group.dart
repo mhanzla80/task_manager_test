@@ -15,7 +15,7 @@ class TaskGroup {
   TaskGroup({
     required this.id,
     required this.name,
-    this.taskItems = const [],
+    this.taskItems = const <KanbanGroupItem>[],
   }) : headerData = KanbanGroupHeaderData(
           groupId: id,
           groupName: name,
