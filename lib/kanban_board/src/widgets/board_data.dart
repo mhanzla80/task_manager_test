@@ -57,6 +57,7 @@ class KanbanBoardController extends ChangeNotifier
     this.onMoveGroupItem,
     this.onMoveGroupItemToGroup,
     this.onStartDraggingCard,
+    this.onAnyChange,
   });
 
   final List<KanbanGroupData> _groupDatas = [];
@@ -73,6 +74,8 @@ class KanbanBoardController extends ChangeNotifier
   final OnMoveGroupItemToGroup? onMoveGroupItemToGroup;
 
   final OnStartDraggingCard? onStartDraggingCard;
+
+  final ValueChanged<List<KanbanGroupData>>? onAnyChange;
 
   /// Returns the unmodifiable list of [KanbanGroupData]
   UnmodifiableListView<KanbanGroupData> get groupDatas =>
@@ -95,6 +98,7 @@ class KanbanBoardController extends ChangeNotifier
     final controller = KanbanGroupController(groupData: groupData);
     _groupDatas.add(groupData);
     _groupControllers[groupData.id] = controller;
+    onAnyChange?.call(_groupDatas);
     if (notify) notifyListeners();
   }
 
@@ -112,6 +116,7 @@ class KanbanBoardController extends ChangeNotifier
     final controller = KanbanGroupController(groupData: groupData);
     _groupDatas.insert(index, groupData);
     _groupControllers[groupData.id] = controller;
+    onAnyChange?.call(_groupDatas);
     if (notify) notifyListeners();
   }
 
@@ -123,6 +128,7 @@ class KanbanBoardController extends ChangeNotifier
     for (final column in groups) {
       addGroup(column, notify: false);
     }
+    onAnyChange?.call(_groupDatas);
 
     if (groups.isNotEmpty && notify) notifyListeners();
   }
@@ -145,6 +151,7 @@ class KanbanBoardController extends ChangeNotifier
 
       if (notify) notifyListeners();
     }
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Removes a list of groups
@@ -156,6 +163,7 @@ class KanbanBoardController extends ChangeNotifier
       removeGroup(groupId, notify: false);
     }
 
+    onAnyChange?.call(_groupDatas);
     if (groupIds.isNotEmpty && notify) notifyListeners();
   }
 
@@ -170,6 +178,7 @@ class KanbanBoardController extends ChangeNotifier
     }
     _groupControllers.clear();
 
+    onAnyChange?.call(_groupDatas);
     notifyListeners();
   }
 
@@ -194,6 +203,7 @@ class KanbanBoardController extends ChangeNotifier
 
     _groupDatas.insert(toIndex, fromGroupData);
     onMoveGroup?.call(fromGroupData.id, fromIndex, toGroupData.id, toIndex);
+    onAnyChange?.call(_groupDatas);
     if (notify) notifyListeners();
   }
 
@@ -202,6 +212,7 @@ class KanbanBoardController extends ChangeNotifier
   void moveGroupItem(String groupId, int fromIndex, int toIndex) {
     if (getGroupController(groupId)?.move(fromIndex, toIndex) ?? false) {
       onMoveGroupItem?.call(groupId, fromIndex, toIndex);
+      onAnyChange?.call(_groupDatas);
     }
   }
 
@@ -210,6 +221,7 @@ class KanbanBoardController extends ChangeNotifier
   /// If the group with id [groupId] is not exist, this method will do nothing.
   void addGroupItem(String groupId, KanbanGroupItem item) {
     getGroupController(groupId)?.add(item);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Inserts the [KanbanGroupItem] at [index] in the group
@@ -217,6 +229,7 @@ class KanbanBoardController extends ChangeNotifier
   /// It will do nothing if the group with id [groupId] is not exist
   void insertGroupItem(String groupId, int index, KanbanGroupItem item) {
     getGroupController(groupId)?.insert(index, item);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Removes the item with id [itemId] from the group
@@ -224,6 +237,7 @@ class KanbanBoardController extends ChangeNotifier
   /// It will do nothing if the group with id [groupId] is not exist
   void removeGroupItem(String groupId, String itemId) {
     getGroupController(groupId)?.removeWhere((item) => item.id == itemId);
+    onAnyChange?.call(_groupDatas);
   }
 
   /// Replaces or inserts the [KanbanGroupItem] to the end of the group.
@@ -231,6 +245,7 @@ class KanbanBoardController extends ChangeNotifier
   /// If the group with id [groupId] is not exist, this method will do nothing.
   void updateGroupItem(String groupId, KanbanGroupItem item) {
     getGroupController(groupId)?.replaceOrInsertItem(item);
+    onAnyChange?.call(_groupDatas);
   }
 
   void enableGroupDragging(bool isEnable) {
@@ -264,6 +279,7 @@ class KanbanBoardController extends ChangeNotifier
         toGroupId,
         toGroupIndex,
       );
+      onAnyChange?.call(_groupDatas);
     }
   }
 
