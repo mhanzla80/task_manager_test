@@ -5,8 +5,11 @@ import 'package:task_manager_test/providers/board_provider.dart';
 class CreateTaskCardWidget extends StatefulWidget {
   final BoardProvider provider;
   final String groupId;
-  const CreateTaskCardWidget(
-      {super.key, required this.provider, required this.groupId});
+  const CreateTaskCardWidget({
+    super.key,
+    required this.provider,
+    required this.groupId,
+  });
 
   @override
   State<CreateTaskCardWidget> createState() => _CreateTaskCardWidgetState();
@@ -69,9 +72,10 @@ class _CreateTaskCardWidgetState extends State<CreateTaskCardWidget> {
                 if (_formKey.currentState!.validate() &&
                     _nameController.text.isNotEmpty) {
                   final task = Task(
-                      title: _nameController.text.trim(),
-                      subtitle: _descController.text.trim());
-                  widget.provider.controller.addGroupItem(widget.groupId, task);
+                    title: _nameController.text.trim(),
+                    subtitle: _descController.text.trim(),
+                  );
+                  widget.provider.addGroupItem(widget.groupId, task);
                   Navigator.pop(context);
                 }
               },

@@ -65,14 +65,19 @@ class TaskGroup {
 
 @JsonSerializable()
 class Task extends KanbanGroupItem {
-  final String title;
-  final String subtitle;
+  String title;
+  String subtitle;
+  List<String> comments;
   final TaskTimer timer;
 
   @override
   String get id => title;
 
-  Task({required this.title, this.subtitle = ''}) : timer = TaskTimer(title);
+  Task({
+    required this.title,
+    this.subtitle = '',
+    this.comments = const <String>[],
+  }) : timer = TaskTimer(title);
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
 

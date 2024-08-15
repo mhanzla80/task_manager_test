@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_test/board/card_detail_screen.dart';
 import 'package:task_manager_test/board/widgets/create_task_card_widget.dart';
 import 'package:task_manager_test/board/widgets/task_card.dart';
 import 'package:task_manager_test/helpers/prefs.dart';
@@ -8,6 +9,7 @@ import 'package:task_manager_test/providers/board_provider.dart';
 
 class BoardScreen extends StatefulWidget {
   final BoardProvider provider;
+
   const BoardScreen({super.key, required this.provider});
 
   @override
@@ -46,7 +48,7 @@ class _BoardScreenState extends State<BoardScreen> {
       cardBuilder: (context, group, groupItem) {
         return KanbanGroupCard(
           key: ValueKey(groupItem.id),
-          child: _buildCard(groupItem),
+          child: _buildCard(groupItem as Task),
         );
       },
       boardScrollController: widget.provider.boardController,
@@ -92,14 +94,29 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
-  Widget _buildCard(KanbanGroupItem item) {
-    if (item is Task) return TaskCard(task: item);
+  Widget _buildCard(Task item) {
+    return GestureDetector(
+      onTap: () async {
+        final isUpdated = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => CardDetailScreen(
+              task: item,
+              provider: widget.provider,
+              groupId: item.id,
+            ),
+          ),
+        );
 
-    throw UnimplementedError();
+        if (isUpdated != null && isUpdated) setState(() {});
+      },
+      child: TaskCard(task: item),
+    );
   }
 
   void createTaskInputBottomSheet(
-      BuildContext context, BoardProvider provider, String id) {
+      BuildContext context, BoardProvider provider, String id,
+      [Task? item]) {
     showModalBottomSheet(
       context: context,
       builder: (context) =>

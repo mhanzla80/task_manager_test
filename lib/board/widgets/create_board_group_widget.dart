@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_test/kanban_board/kanban_board.dart';
 import 'package:task_manager_test/providers/board_provider.dart';
 
 class CreateBoardGroupWidget extends StatefulWidget {
@@ -53,13 +52,7 @@ class _CreateBoardGroupWidgetState extends State<CreateBoardGroupWidget> {
               onPressed: () {
                 if (_formKey.currentState!.validate() &&
                     _nameController.text.isNotEmpty) {
-                  widget.provider.controller.addGroup(
-                    KanbanGroupData(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      name: _nameController.text.trim(),
-                      items: <KanbanGroupItem>[],
-                    ),
-                  );
+                  widget.provider.addGroup(_nameController.text.trim());
                   Navigator.pop(context);
                 }
               },
