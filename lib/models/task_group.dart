@@ -21,6 +21,9 @@ class TaskGroup {
           groupName: name,
         );
 
+  static List<TaskGroup> fromJsonList(List<dynamic> jsonList) =>
+      jsonList.map((e) => TaskGroup.fromJson(e)).toList();
+
   factory TaskGroup.fromJson(Map<String, dynamic> json) =>
       _$TaskGroupFromJson(json);
 

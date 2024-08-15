@@ -191,7 +191,7 @@ class KanbanGroupController extends ChangeNotifier with EquatableMixin {
 class KanbanGroupData<CustomData> extends ReorderFlexItem with EquatableMixin {
   KanbanGroupData({
     required this.id,
-    required String name,
+    required this.name,
     this.customData,
     List<KanbanGroupItem> items = const [],
   })  : _items = items,
@@ -199,6 +199,7 @@ class KanbanGroupData<CustomData> extends ReorderFlexItem with EquatableMixin {
           groupId: id,
           groupName: name,
         );
+  final String name;
 
   @override
   final String id;
